@@ -155,15 +155,6 @@
                             class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue outline-none transition-all text-slate-700 placeholder-slate-400">
                     </div>
 
-                    <!-- Unit/Bidang -->
-                    <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">
-                            Unit Kerja/ Bidang <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" id="unitPeserta" required placeholder="Contoh: D4 Administrasi Perkantoran" 
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-brand-blue focus:border-brand-blue outline-none transition-all text-slate-700 placeholder-slate-400">
-                    </div>
-
                     <!-- Pilihan Kehadiran -->
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-3">
@@ -182,11 +173,9 @@
                                     </div>
                                 </label>
                             </div>
-                            
-                           
                             <!-- Option 2: Tidak -->
                             <div class="relative">
-                                <input class="radio-card peer hidden" type="radio" name="kehadiran" id="hadir_tidak" value="Tidak Hadir" required>
+                                <input class="radio-card peer hidden" type="radio" name="kehadiran" id="hadir_tidak" value="Tidak" required>
                                 <label for="hadir_tidak" class="flex items-center gap-3 p-3.5 border border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition-all">
                                      <div class="w-6 h-6 rounded-full border-2 border-slate-300 flex items-center justify-center peer-checked:border-slate-500 peer-checked:bg-slate-500 transition-colors relative shrink-0">
                                         <i class="ph-bold ph-check text-white text-xs opacity-0 check-icon absolute"></i>
@@ -194,10 +183,6 @@
                                     <div>
                                         <p class="font-bold text-sm text-slate-800">Tidak</p>
                                     </div>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
 
                     <!-- Pesan Error/Sukses (Hidden by default) -->
                     <div id="formMessage" class="hidden text-sm p-3 rounded-lg"></div>
