@@ -516,8 +516,8 @@
                 const reversedData = [...rsvpData].reverse();
 
                 reversedData.forEach(row => {
-                    const isBus = row.status === 'Bus UNY' || row.status === 'Ya, Bersedia Menggunakan Bus';
-                    const isPribadi = row.status === 'Pribadi' || row.status.includes('Pribadi');
+                    const isBus = row.status === 'Bus UNY' || row.status === 'Ya';
+                    const isPribadi = row.status === '' || row.status.includes('');
 
                     if(isBus) busCount++;
                     else if(isPribadi) pribadiCount++;
@@ -560,7 +560,6 @@
                 "No": index + 1,
                 "Waktu Submit": item.timestamp,
                 "Nama Lengkap": item.nama,
-                "Unit / Bidang": item.unit,
                 "Status Kehadiran": item.status
             }));
 
@@ -569,7 +568,7 @@
             worksheet['!cols'] = wscols;
 
             const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Rekap Kehadiran");
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Rekap yang Menggunakan Bus");
 
             const today = new Date().toISOString().split('T')[0];
             XLSX.writeFile(workbook, `Rekap_Kehadiran_HAORNAS_43_${today}.xlsx`);
