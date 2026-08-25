@@ -499,7 +499,7 @@
             document.body.style.overflow = '';
         }
 
-        function renderTable() {
+       function renderTable() {
             const tbody = document.getElementById('dataTableBody');
             const emptyState = document.getElementById('emptyDataState');
             tbody.innerHTML = '';
@@ -516,11 +516,11 @@
                 const reversedData = [...rsvpData].reverse();
 
                 reversedData.forEach(row => {
-                    const isBus = row.status === 'Bus UNY' || row.status === 'Ya';
-                    const isPribadi = row.status === '' || row.status.includes('');
+                    const originalIndex = rsvpData.indexOf(row);
+                    const isBus = row.status === 'Ya' || row.status === 'Ya';
+                    const isTidak = row.status === 'Tidak' || row.status.includes('Tidak');
 
                     if(isBus) busCount++;
-                    else if(isPribadi) pribadiCount++;
                     else tidakHadirCount++;
 
                     let statusBadge = '';
@@ -539,15 +539,19 @@
                         <td class="py-3 px-4 font-medium text-slate-800">${row.nama}</td>
                         <td class="py-3 px-4 text-slate-600">${row.unit || '-'}</td>
                         <td class="py-3 px-4 text-center">${statusBadge}</td>
+                        <td class="py-3 px-4 text-center">
+                            <button onclick="deleteData(${originalIndex})" class="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Hapus Data">
+                                <i class="ph-bold ph-trash text-base"></i>
+                            </button>
+                        </td>
                     `;
                     tbody.appendChild(tr);
                 });
             }
 
             document.getElementById('statTotal').textContent = rsvpData.length;
-            document.getElementById('statBus').textContent = busCount;
-            document.getElementById('statPribadi').textContent = pribadiCount;
-            document.getElementById('statTidakHadir').textContent = tidakHadirCount;
+            document.getElementById('statYa').textContent = yaCount;
+            document.getElementById('statTidak').textContent = tidakCount;
         }
 
         function downloadExcel() {
@@ -568,7 +572,7 @@
             worksheet['!cols'] = wscols;
 
             const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Rekap yang Menggunakan Bus");
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Rekap Kehadiran");
 
             const today = new Date().toISOString().split('T')[0];
             XLSX.writeFile(workbook, `Rekap_Kehadiran_HAORNAS_43_${today}.xlsx`);
@@ -576,3 +580,4 @@
     </script>
 </body>
 </html>
+Anda cukup menyalin (copy) seluruh kode di atas lalu menimpa (replace) seluruh isi file index.html di GitHub.
