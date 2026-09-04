@@ -266,7 +266,7 @@
     <script>
         const ADMIN_USERNAME = 'HaornasUNY';
         const ADMIN_PASSWORD = 'HaornasUNY-43';
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzPB0g-cGmaUzTC7QfS_LUaZFOTmiShIBOr1ORKN2TIYTxgY7ukvdqwkD6jjwqCFGdNLA/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzThlqP0DzUBOBw7TsautuWv4-x6xftYbmghLvNG4p7Vy14TwTJiCJgnIjV9hmWzuaXqg/exec';
         
         const STORAGE_KEY = 'haornas_rsvp_data';
         const MAX_BUS_CAPACITY = 90;
@@ -304,40 +304,44 @@
         }
         
         function saveData(newData, formMessage, submitBtn, btnText, btnIcon) {
-            if (SCRIPT_URL !== '') {
-                const formData = new FormData();
-                formData.append('timestamp', newData.timestamp);
-                formData.append('nama', newData.nama);
-                formData.append('status', newData.status);
+    if (SCRIPT_URL !== '') {
+        // Menggunakan URLSearchParams agar tidak memicu error CORS di Apps Script
+        const params = new URLSearchParams();
+        params.append('timestamp', newData.timestamp);
+        params.append('nama', newData.nama);
+        params.append('status', newData.status);
 
-                fetch(SCRIPT_URL, { 
-                    method: 'POST', 
-                    body: formData 
-                })
-                .then(res => res.json())
-                .then(data => {
-                    rsvpData.push(newData);
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(rsvpData));
-                    updateQuotaUI();
-                    showSuccessMessage(formMessage);
-                })
-                .catch(error => {
-                    rsvpData.push(newData);
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(rsvpData));
-                    updateQuotaUI();
-                    showSuccessMessage(formMessage);
-                })
-                .finally(() => {
-                    restoreSubmitButton(submitBtn, btnText, btnIcon);
-                });
-            } else {
+        fetch(SCRIPT_URL, { 
+            method: 'POST', 
+            body: params 
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.result === 'success') {
                 rsvpData.push(newData);
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(rsvpData));
                 updateQuotaUI();
                 showSuccessMessage(formMessage);
-                restoreSubmitButton(submitBtn, btnText, btnIcon);
+            } else {
+                throw new Error("Gagal menyimpan ke server");
             }
-        }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            // Menampilkan pesan gagal yang jujur ke pengisi
+            formMessage.innerHTML = '<i class="ph-fill ph-x-circle inline-block mr-1"></i> Gagal mengirim data. Silakan periksa koneksi dan coba lagi.';
+            formMessage.className = "text-xs sm:text-sm p-3.5 rounded-xl bg-red-50 text-red-700 border border-red-200 block";
+        })
+        .finally(() => {
+            restoreSubmitButton(submitBtn, btnText, btnIcon);
+        });
+    } else {
+        rsvpData.push(newData);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(rsvpData));
+        updateQuotaUI();
+        showSuccessMessage(formMessage);
+        restoreSubmitButton(submitBtn, btnText, btnIcon);
+    }
+}
 
         function showSuccessMessage(formMessage) {
             formMessage.innerHTML = '<i class="ph-fill ph-check-circle inline-block mr-1"></i> Terima kasih, konfirmasi kehadiran berhasil dicatat!';
